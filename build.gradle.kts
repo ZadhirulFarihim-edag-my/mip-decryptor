@@ -7,7 +7,7 @@ plugins {
 
 group = "com.rnr"
 version = "0.0.1-SNAPSHOT"
-description = "Azure MIP Decryptor service"
+description = "rnr-mip-decryptor"
 
 java {
 	toolchain {
@@ -17,11 +17,17 @@ java {
 
 repositories {
 	mavenCentral()
+	flatDir {
+		dirs("libs")
+	}
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("com.microsoft.azure:msal4j:1.14.2")
+	implementation(group = "", name = "mip-sdk-protection-1.14.88")
+	implementation("commons-io:commons-io:2.11.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
