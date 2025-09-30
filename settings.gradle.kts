@@ -1,1 +1,1 @@
-rootProject.name = "mipdecryptor"
+rootProject.name = "rnr-mip-decryptor"
