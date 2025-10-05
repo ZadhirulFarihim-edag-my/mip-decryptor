@@ -5,7 +5,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@ComponentScan(basePackages = ["com.rnr"])
+@ComponentScan(basePackages = ["com.rnr.aip"])
 class AipApplication
 
 fun main(args: Array<String>) {
