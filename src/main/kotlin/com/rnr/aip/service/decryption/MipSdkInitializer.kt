@@ -71,6 +71,7 @@ class MipSdkInitializer(
 
         val archSubdir = when (platform.architecture) {
             Architecture.AMD64 -> "amd64"
+            Architecture.ARM64 -> "arm64"
             Architecture.X86 -> "x86"
             Architecture.UNKNOWN -> "amd64"
         }
@@ -140,7 +141,9 @@ class MipSdkInitializer(
             val projectRoot = System.getProperty("user.dir")
             val archSubdir = when (platform.architecture) {
                 Architecture.AMD64 -> "amd64"
-                else -> throw RuntimeException("Unsupported architecture: ${platform.architecture}")
+                Architecture.ARM64 -> "arm64"
+                Architecture.X86 -> "x86"
+                Architecture.UNKNOWN -> "amd64"
             }
 
             val libsDir = Paths.get(projectRoot, "libs", archSubdir).toAbsolutePath().toString()

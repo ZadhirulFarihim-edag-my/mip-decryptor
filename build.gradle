@@ -30,7 +30,7 @@ repositories {
     }
 }
 
-def osName = System.getProperty("os.name").toLowerCase()
+def osName = System.getProperty("os.name").toLowerCase(Locale.ROOT)
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -40,27 +40,26 @@ dependencies {
     implementation platform('software.amazon.awssdk:bom:2.27.18')
     implementation 'software.amazon.awssdk:s3-transfer-manager'
 
-    // Main MIP SDK Java library (from local libs directory)
+    // Local SDK
     implementation files('libs/java-sdk-wrapper.jar')
 
-    // --- Native library loading is handled by the MIP SDK at runtime ---
-    // The SDK will automatically load the appropriate native library from the libs directory
-    // based on the OS. Ensure the following files are present:
-    // - Windows: mip_java.dll (already present)
-    // - macOS: Add mip_java.dylib to libs directory for macOS support
-    // - Linux: Add mip_java.so to libs directory for Linux support
-    if (osName.contains("win")) {
-        println "Detected Windows OS, native library (mip_java.dll) should be loaded from libs directory."
-    } else if (osName.contains("mac")) {
-        println "Detected macOS, ensure mip_java.dylib is present in libs directory."
-    } else {
-        println "Detected Linux/other OS, ensure mip_java.so is present in libs directory."
+    // Native lib hint (printed during configuration)
+    def nativeLibHint = {
+        if (osName.contains("win")) {
+            "Detected Windows OS — ensure mip_java.dll is in libs directory."
+        } else if (osName.contains("mac")) {
+            "Detected macOS — ensure mip_java.dylib is in libs directory."
+        } else if (osName.contains("nux") || osName.contains("nix") || osName.contains("ubuntu")) {
+            "Detected Linux — ensure mip_java.so is in libs directory."
+        } else {
+            "Unknown OS — verify appropriate native library exists."
+        }
     }
+    println(nativeLibHint())
 
     testImplementation 'org.mockito.kotlin:mockito-kotlin:5.4.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:5.0.0-alpha.14'
     testImplementation 'org.mock-server:mockserver-client-java:5.15.0'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -80,22 +79,5 @@ tasks.named('test', Test) {
     testLogging {
         events 'PASSED', 'SKIPPED', 'FAILED', 'STANDARD_ERROR'
         exceptionFormat = 'FULL'
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.required.set(true)
-        html.required.set(false)
-        csv.required.set(false)
-    }
-}
-
-sonarqube {
-    properties {
-        property 'sonar.host.url', 'https://devstack.vwgroup.com/sonar'
-        property 'sonar.projectKey', 'RNR:AIP'
-        property 'sonar.projectName', 'Risk & Response AIP'
-        property 'sonar.exclusions', 'src/main/kotlin/com/rnr/aip/storage/S3ClientFactory.kt'
     }
 }
