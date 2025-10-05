@@ -1,0 +1,7 @@
+# https://editorconfig.org
+root = true
+
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+ij_continuation_indent_size = 8

@@ -1,0 +1,24 @@
+#
+# Usage: Copy and rename file to application.properties. It will overwrite properties if you start the application
+#        locally.
+#
+
+#
+# make sure properties are not applied for unit tests
+#
+spring.config.activate.on-profile=!test
+
+
+#
+# overwrite properties for your local needs
+#
+
+# app.aip.s3.endpoint=http://localhost:9000
+# app.aip.s3.region=eu-central-1
+# app.aip.s3.access-key=
+# app.aip.s3.secret-key=
+# app.aip.s3.upload.bucket=
+# app.aip.s3.expiration-in-days=10
+# app.aip.s3.noncurrent-version-expiration-in-days=10
+
+# server.port=8081
